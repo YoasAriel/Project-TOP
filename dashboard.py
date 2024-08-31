@@ -61,24 +61,38 @@ total_qty = int(so_all_df_selection["QTY_TOTAL"].sum())
 average_net_selling = round(so_all_df_selection["NET_SELLING"].mean(), 2)
 left_column, middle_column, right_column = st.columns(3)
 with left_column:
-    st.subheader("Total Net Selling ")
+    st.subheader("Total Revenue ")
     st.subheader(f"{total_net_selling:,}")
 with middle_column:
     st.subheader("Total QTY ")
     st.subheader(f"{total_qty:,}")
 with right_column:
-    st.subheader("Average Net Selling  ")
+    st.subheader("Average Revenue  ")
     st.subheader(f"{average_net_selling:,}")
     
 st.markdown("___")
-st.subheader("Cabang")
 
 # TABLE BRANCH
 branch = so_all_df_selection.groupby(["LINE_SELLING", "CABANG"]).agg({
     "NET_SELLING": "sum",
     "QTY_TOTAL": "sum"
 })
-st.dataframe(branch)
+outlet = so_all_df_selection.groupby(["OUTLET"]).agg({
+    "NET_SELLING": "sum"
+}).sort_values(by="NET_SELLING", ascending=False)
+sales = so_all_df_selection.groupby(["SALES"]).agg({
+    "NET_SELLING": "sum"
+}).sort_values(by="NET_SELLING", ascending=False)
+left_column, middle_column, right_column = st.columns(3)
+with left_column:
+    st.subheader("Branch")
+    st.dataframe(branch)
+with middle_column:
+    st.subheader("Outlet")
+    st.dataframe(outlet)
+with right_column:
+    st.subheader("Sales")
+    st.dataframe(sales)
 
 # TABLE PRODUCT
 kategori = so_all_df_selection.groupby("KATEGORI").agg({
