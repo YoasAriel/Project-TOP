@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-import openpyxl
+
 
 sns.set(style='dark')
 
@@ -17,7 +17,7 @@ st.title("CV. Tunggal Opti Persada Dashboard")
 # Get Data From Excel
 @st.cache_data
 def  load_data():
-    so_all_df = pd.read_excel("so_24.xlsx", engine="openpyxl")
+    so_all_df = pd.read_excel("so_24.xlsx")
     so_all_df['NET_SELLING'] = so_all_df.JL - so_all_df.RT
     so_all_df['QTY_TOTAL'] = so_all_df.qty_JUAL - so_all_df.qty_RETUR
     so_all_df['NET_PRICE'] = so_all_df.NET_SELLING / so_all_df.QTY_TOTAL
