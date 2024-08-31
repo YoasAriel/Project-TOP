@@ -23,8 +23,15 @@ def  load_data():
     return so_all_df
 so_all_df = load_data()
 
+# Icon
+st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
+
 # Sidebar for user input
-st.sidebar.header("Menu")
+line_selling = st.sidebar.multiselect(
+    "Line Selling",
+    options=so_all_df["LINE_SELLING"].unique(),
+    default=so_all_df["LINE_SELLING"].unique()
+)
 tipe_outlet = st.sidebar.multiselect(
     "Tipe Outlet",
     options=so_all_df["TIPE_OUTLET"].unique(),
@@ -52,8 +59,9 @@ processor = st.sidebar.multiselect(
 )
 
 so_all_df_selection = so_all_df.query(
-    "TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor"
+    "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor"
 )
+
 
 # KPI
 total_net_selling = int(so_all_df_selection["NET_SELLING"].sum())
@@ -73,17 +81,17 @@ with right_column:
 st.markdown("___")
 
 # TABLE BRANCH
-branch = so_all_df_selection.groupby(["LINE_SELLING", "CABANG"]).agg({
+branch = so_all_df_selection.groupby(["CABANG"]).agg({
     "NET_SELLING": "sum",
     "QTY_TOTAL": "sum"
-})
+}).sort_values(by="NET_SELLING", ascending=False)
 outlet = so_all_df_selection.groupby(["OUTLET"]).agg({
     "NET_SELLING": "sum"
 }).sort_values(by="NET_SELLING", ascending=False)
 sales = so_all_df_selection.groupby(["SALES"]).agg({
     "NET_SELLING": "sum"
 }).sort_values(by="NET_SELLING", ascending=False)
-left_column, middle_column, right_column = st.columns(3)
+left_column, middle_column, right_column = st.columns([2, 1, 1])
 with left_column:
     st.subheader("Branch")
     st.dataframe(branch)
