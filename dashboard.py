@@ -27,6 +27,9 @@ so_all_df = load_data()
 st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
 
 # Sidebar for user input
+so_all_df["TGL_NOTA"] = pd.to_datetime(so_all_df["TGL_NOTA"])
+start_date = st.sidebar.date_input("Start Date", value=so_all_df["TGL_NOTA"].min(), format="DD/MM/YYYY")
+end_date = st.sidebar.date_input("End Date", value=so_all_df["TGL_NOTA"].max(), format="DD/MM/YYYY")
 line_selling = st.sidebar.multiselect(
     "Line Selling",
     options=so_all_df["LINE_SELLING"].unique(),
@@ -59,7 +62,7 @@ processor = st.sidebar.multiselect(
 )
 
 so_all_df_selection = so_all_df.query(
-    "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor"
+    "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor & TGL_NOTA >= @start_date & TGL_NOTA <= @end_date"
 )
 
 
