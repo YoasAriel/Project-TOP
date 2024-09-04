@@ -3,7 +3,6 @@ import pandas as pd
 import seaborn as sns
 import streamlit as st
 import openpyxl
-from streamlit_navigation_bar import st_navbar
 sns.set(style='dark')
 
 # Title of the dashboard
