@@ -3,6 +3,7 @@ import pandas as pd
 import seaborn as sns
 import streamlit as st
 import openpyxl
+from streamlit_navigation_bar import st_navbar
 sns.set(style='dark')
 
 # Title of the dashboard
@@ -11,7 +12,6 @@ st.set_page_config(
     page_icon="logo_top_white.jpg",
     layout="wide"
 )
-st.title("CV. Tunggal Opti Persada Dashboard")
 
 # Get Data From Excel
 @st.cache_data
@@ -66,6 +66,7 @@ so_all_df_selection = so_all_df.query(
 )
 
 
+st.title("CV. Tunggal Opti Persada Dashboard")
 # KPI
 total_net_selling = int(so_all_df_selection["NET_SELLING"].sum())
 total_qty = int(so_all_df_selection["QTY_TOTAL"].sum())
@@ -128,7 +129,6 @@ with middle_column:
 with right_column:
     st.subheader("Processor")
     st.dataframe(processor)
-
-
 # Footer
 st.caption("Copyright © Yoas_Ariel 2024")
+
