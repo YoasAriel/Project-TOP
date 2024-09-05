@@ -4,7 +4,6 @@ import seaborn as sns
 import streamlit as st
 import openpyxl
 sns.set(style='dark')
-
 # Title of the dashboard
 st.set_page_config(
     page_title="TOP COMPUTER DASHBOARD", 
