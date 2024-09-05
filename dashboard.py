@@ -93,7 +93,7 @@ outlet = so_all_df_selection.groupby(["OUTLET"]).agg({
 sales = so_all_df_selection.groupby(["SALES"]).agg({
     "NET_SELLING": "sum"
 }).sort_values(by="NET_SELLING", ascending=False)
-left_column, middle_column, right_column = st.columns([2, 1, 1])
+left_column, middle_column, right_column = st.columns([3, 2, 2])
 with left_column:
     st.subheader("Branch")
     st.dataframe(branch)
