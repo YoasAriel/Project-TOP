@@ -243,7 +243,7 @@ def dashboard():
     st.markdown("___")
 
 
-
+# Menu
 selected = option_menu(
         menu_title=None, #required
         options=["Home", "Table", "Dashboard"], #required
@@ -264,7 +264,7 @@ selected = option_menu(
         },
     )
 
-# Menu
+# Page
 if selected == "Home":
     home()
 if selected == "Table":
