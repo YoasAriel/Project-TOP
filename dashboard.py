@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 import streamlit as st
 import openpyxl
 from streamlit_option_menu import option_menu
@@ -236,12 +237,47 @@ def dashboard():
         default=so_all_df["PROCESSOR"].unique()
     )
 
-    so_all_df_selection = so_all_df.query(
+    so_all_df_selection_dashboard = so_all_df.query(
         "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor & TGL_NOTA >= @start_date & TGL_NOTA <= @end_date"
     )
-
-    st.title("Under Construction . . .")
+    # KPI
+    total_net_selling = int(so_all_df_selection_dashboard["NET_SELLING"].sum())
+    total_qty = int(so_all_df_selection_dashboard["QTY_TOTAL"].sum())
+    average_net_selling = round(so_all_df_selection_dashboard["NET_SELLING"].mean(), 2)
+    left_column, middle_column, right_column = st.columns(3)
+    with left_column:
+        st.subheader("Total Revenue ")
+        st.subheader(f"{total_net_selling:,}")
+    with middle_column:
+        st.subheader("Total QTY ")
+        st.subheader(f"{total_qty:,}")
+    with right_column:
+        st.subheader("Average Revenue  ")
+        st.subheader(f"{average_net_selling:,}")
     st.markdown("___")
+    st.title("Under Construction . . .")
+    
+
+    top10_category, top10_brand = st.columns(2)
+    #TOP 10 Category
+    with top10_category:
+        st.subheader("Top 10 by Category")
+        top10_category_df = so_all_df_selection_dashboard.groupby("KATEGORI").NET_SELLING.sum().sort_values(ascending=False).reset_index()
+        plt.figure(figsize=(10,6))
+        plt.bar(top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["KATEGORI"], top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
+        plt.title("Top 10 by Category")
+        plt.xlabel("Category")
+        plt.ylabel("Total Revenue")
+        plt.xticks(rotation=45, ha="right")
+        st.pyplot(plt.gcf())
+    with top10_brand:
+        st.subheader("Top 10 by Brand")
+        top10_brand_df = so_all_df_selection_dashboard.groupby("MERK").NET_SELLING.sum().sort_values(ascending=False).reset_index()
+
+
+
+    # Footer
+    st.caption("Copyright © Yoas_Ariel 2024")
 
 
 # Menu
