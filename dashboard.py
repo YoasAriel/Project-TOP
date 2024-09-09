@@ -60,7 +60,7 @@ def home():
         default=so_all_df["MERK"].unique()
     )
     processor = st.sidebar.multiselect(
-        "MERK",
+        "PROCESSOR",
         options=so_all_df["PROCESSOR"].unique(),
         default=so_all_df["PROCESSOR"].unique()
     )
@@ -122,7 +122,7 @@ def table():
         default=so_all_df["MERK"].unique()
     )
     processor = st.sidebar.multiselect(
-        "MERK",
+        "PROCESSOR",
         options=so_all_df["PROCESSOR"].unique(),
         default=so_all_df["PROCESSOR"].unique()
     )
@@ -232,7 +232,7 @@ def dashboard():
         default=so_all_df["MERK"].unique()
     )
     processor = st.sidebar.multiselect(
-        "MERK",
+        "PROCESSOR",
         options=so_all_df["PROCESSOR"].unique(),
         default=so_all_df["PROCESSOR"].unique()
     )
@@ -259,7 +259,7 @@ def dashboard():
     
 
     top10_category, top10_brand = st.columns(2)
-    #TOP 10 Category
+    #TOP 10 Category & Brand
     with top10_category:
         st.subheader("Top 10 by Category")
         top10_category_df = so_all_df_selection_dashboard.groupby("KATEGORI").NET_SELLING.sum().sort_values(ascending=False).reset_index()
@@ -273,8 +273,14 @@ def dashboard():
     with top10_brand:
         st.subheader("Top 10 by Brand")
         top10_brand_df = so_all_df_selection_dashboard.groupby("MERK").NET_SELLING.sum().sort_values(ascending=False).reset_index()
-
-
+        top10_brand_df["MERK"] = top10_brand_df["MERK"].astype(str)
+        plt.figure(figsize=(10,6))
+        plt.bar(top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["MERK"], top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
+        plt.title("Top 10 by Brand")
+        plt.xlabel("Brand")
+        plt.ylabel("Total Revenue")
+        plt.xticks(rotation=45, ha="right")
+        st.pyplot(plt.gcf())
 
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
