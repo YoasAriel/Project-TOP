@@ -237,13 +237,13 @@ def dashboard():
         default=so_all_df["PROCESSOR"].unique()
     )
 
-    so_all_df_selection_dashboard = so_all_df.query(
+    so_all_df_selection = so_all_df.query(
         "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor & TGL_NOTA >= @start_date & TGL_NOTA <= @end_date"
     )
     # KPI
-    total_net_selling = int(so_all_df_selection_dashboard["NET_SELLING"].sum())
-    total_qty = int(so_all_df_selection_dashboard["QTY_TOTAL"].sum())
-    average_net_selling = round(so_all_df_selection_dashboard["NET_SELLING"].mean(), 2)
+    total_net_selling = int(so_all_df_selection["NET_SELLING"].sum())
+    total_qty = int(so_all_df_selection["QTY_TOTAL"].sum())
+    average_net_selling = round(so_all_df_selection["NET_SELLING"].mean(), 2)
     left_column, middle_column, right_column = st.columns(3)
     with left_column:
         st.subheader("Total Revenue ")
@@ -257,12 +257,14 @@ def dashboard():
     st.markdown("___")
     st.title("Under Construction . . .")
     
-
+    # Line Selling
+    """so_all_df_selection_dashboard["Month"] = so_all_df_selection_dashboard["TGL_NOTA"].dt.month
+    st.line_chart(data=so_all_df_selection_dashboard, x="Month", y="NET_SELLING", color="LINE_SELLING")"""
     top10_category, top10_brand = st.columns(2)
-    #TOP 10 Category & Brand
+    # TOP 10 Category & Brand
     with top10_category:
         st.subheader("Top 10 by Category")
-        top10_category_df = so_all_df_selection_dashboard.groupby("KATEGORI").NET_SELLING.sum().sort_values(ascending=False).reset_index()
+        top10_category_df = so_all_df_selection.groupby("KATEGORI").NET_SELLING.sum().sort_values(ascending=False).reset_index()
         plt.figure(figsize=(10,6))
         plt.bar(top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["KATEGORI"], top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
         plt.title("Top 10 by Category")
@@ -272,7 +274,7 @@ def dashboard():
         st.pyplot(plt.gcf())
     with top10_brand:
         st.subheader("Top 10 by Brand")
-        top10_brand_df = so_all_df_selection_dashboard.groupby("MERK").NET_SELLING.sum().sort_values(ascending=False).reset_index()
+        top10_brand_df = so_all_df_selection.groupby("MERK").NET_SELLING.sum().sort_values(ascending=False).reset_index()
         top10_brand_df["MERK"] = top10_brand_df["MERK"].astype(str)
         plt.figure(figsize=(10,6))
         plt.bar(top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["MERK"], top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
@@ -281,16 +283,15 @@ def dashboard():
         plt.ylabel("Total Revenue")
         plt.xticks(rotation=45, ha="right")
         st.pyplot(plt.gcf())
-
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
 
 
 # Menu
 selected = option_menu(
-        menu_title=None, #required
-        options=["Home", "Table", "Dashboard"], #required
-        icons=["house-door-fill", "table", "graph-up"], #optional
+        menu_title=None,
+        options=["Home", "Table", "Dashboard"],
+        icons=["house-door-fill", "table", "graph-up"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal",
