@@ -257,15 +257,17 @@ def dashboard():
     st.title("Under Construction . . .")
     
     # Line Selling
-    month_order = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    st.subheader("Total Revenue by Line Selling")
+    month_order = ["January", "February", "March", "April", "May", "June", "July", "August", "September"]
     so_all_df_selection["Bulan"] = pd.Categorical(so_all_df_selection["Bulan"], categories=month_order, ordered=True)
-    st.line_chart(so_all_df_selection, x="Bulan", y="NET_SELLING", color="LINE_SELLING")
+    line_selling_df = so_all_df_selection.groupby(["LINE_SELLING", "Bulan"])["NET_SELLING"].sum().reset_index()
+    st.line_chart(data=line_selling_df, x="Bulan", y="NET_SELLING", color="LINE_SELLING", use_container_width=True)
     
     # TOP 10 Category & Brand
     top10_category, top10_brand = st.columns(2)
     with top10_category:
         st.subheader("Top 10 by Category")
-        top10_category_df = so_all_df_selection.groupby("KATEGORI").NET_SELLING.sum().sort_values(ascending=False).reset_index()
+        top10_category_df = so_all_df_selection.groupby("KATEGORI")["NET_SELLING"].sum().sort_values(ascending=False).reset_index()
         plt.figure(figsize=(10,6))
         plt.bar(top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["KATEGORI"], top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
         plt.title("Top 10 by Category")
@@ -275,7 +277,7 @@ def dashboard():
         st.pyplot(plt.gcf())
     with top10_brand:
         st.subheader("Top 10 by Brand")
-        top10_brand_df = so_all_df_selection.groupby("MERK").NET_SELLING.sum().sort_values(ascending=False).reset_index()
+        top10_brand_df = so_all_df_selection.groupby("MERK")["NET_SELLING"].sum().sort_values(ascending=False).reset_index()
         top10_brand_df["MERK"] = top10_brand_df["MERK"].astype(str)
         plt.figure(figsize=(10,6))
         plt.bar(top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["MERK"], top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
