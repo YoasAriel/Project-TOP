@@ -236,7 +236,6 @@ def dashboard():
         options=so_all_df["PROCESSOR"].unique(),
         default=so_all_df["PROCESSOR"].unique()
     )
-
     so_all_df_selection = so_all_df.query(
         "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor & TGL_NOTA >= @start_date & TGL_NOTA <= @end_date"
     )
@@ -258,10 +257,12 @@ def dashboard():
     st.title("Under Construction . . .")
     
     # Line Selling
-    """so_all_df_selection_dashboard["Month"] = so_all_df_selection_dashboard["TGL_NOTA"].dt.month
-    st.line_chart(data=so_all_df_selection_dashboard, x="Month", y="NET_SELLING", color="LINE_SELLING")"""
-    top10_category, top10_brand = st.columns(2)
+    month_order = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    so_all_df_selection["Bulan"] = pd.Categorical(so_all_df_selection["Bulan"], categories=month_order, ordered=True)
+    st.line_chart(so_all_df_selection, x="Bulan", y="NET_SELLING", color="LINE_SELLING")
+    
     # TOP 10 Category & Brand
+    top10_category, top10_brand = st.columns(2)
     with top10_category:
         st.subheader("Top 10 by Category")
         top10_category_df = so_all_df_selection.groupby("KATEGORI").NET_SELLING.sum().sort_values(ascending=False).reset_index()
@@ -283,6 +284,7 @@ def dashboard():
         plt.ylabel("Total Revenue")
         plt.xticks(rotation=45, ha="right")
         st.pyplot(plt.gcf())
+
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
 
