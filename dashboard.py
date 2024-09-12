@@ -23,11 +23,12 @@ def  load_data():
     so_all_df['NET_PRICE'] = so_all_df.NET_SELLING / so_all_df.QTY_TOTAL
     return so_all_df
 so_all_df = load_data()
+stock_df = pd.read_excel("stock.xlsx", engine="openpyxl")
 
 def home():
     # Title
     st.title("CV. Tunggal Opti Persada - TOP Computer")
-# Icon
+    # Icon
     st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
 
     # Sidebar for user input
@@ -199,7 +200,7 @@ def table():
     st.caption("Copyright © Yoas_Ariel 2024")
 
 def dashboard():
-# Icon
+    # Icon
     st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
 
     # Sidebar for user input
@@ -239,6 +240,7 @@ def dashboard():
     so_all_df_selection = so_all_df.query(
         "LINE_SELLING == @line_selling & TIPE_OUTLET == @tipe_outlet & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor & TGL_NOTA >= @start_date & TGL_NOTA <= @end_date"
     )
+
     # KPI
     total_net_selling = int(so_all_df_selection["NET_SELLING"].sum())
     total_qty = int(so_all_df_selection["QTY_TOTAL"].sum())
@@ -286,16 +288,87 @@ def dashboard():
         plt.ylabel("Total Revenue")
         plt.xticks(rotation=45, ha="right")
         st.pyplot(plt.gcf())
+    
+    # Pie Chart
 
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
 
+def stock():
+    # Title
+    st.title("CV. Tunggal Opti Persada - TOP Computer")
+    # Icon
+    st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
+    select_all = st.checkbox("Select All Product")
+    if select_all:
+        product = stock_df["PRODUCT"]
+    else:
+        product = st.multiselect(
+        "Select Product :",
+        options=stock_df["PRODUCT"].unique(),
+        default=[]
+        )
+    
+    cabang = st.sidebar.multiselect(
+        "CABANG",
+        options=stock_df["CABANG"].unique(),
+        default=stock_df["CABANG"].unique()
+    )
+    kategori = st.sidebar.multiselect(
+        "KATEGORI",
+        options=stock_df["KATEGORI"].unique(),
+        default=stock_df["KATEGORI"].unique()
+    )
+    merk = st.sidebar.multiselect(
+        "MERK",
+        options=stock_df["MERK"].unique(),
+        default=stock_df["MERK"].unique()
+    )
+    processor = st.sidebar.multiselect(
+        "PROCESSOR",
+        options=stock_df["PROCESSOR"].unique(),
+        default=stock_df["PROCESSOR"].unique()
+    )
+    stock_df_selection = stock_df.query(
+    "PRODUCT == @product & CABANG == @cabang & KATEGORI == @kategori & MERK == @merk & PROCESSOR == @processor"
+    )
+
+    # Product, Cabang DF
+    product = stock_df_selection.groupby(["PRODUCT", "CABANG"]).agg({
+        "QTY": "sum"
+    }).sort_values(by="QTY", ascending=False)
+    st.subheader("Product")
+    st.dataframe(product, width=750, use_container_width=False)
+
+    # Kategori, Merk, Processor DF
+    kategori = stock_df_selection.groupby("KATEGORI").agg({
+        "QTY": "sum"
+    }).sort_values(by="QTY", ascending=False)
+    merk = stock_df_selection.groupby("MERK").agg({
+        "QTY": "sum"
+    }).sort_values(by="QTY", ascending=False)
+    processor = stock_df_selection.groupby("PROCESSOR").agg({
+        "QTY": "sum"
+    }).sort_values(by="QTY", ascending=False)
+    left_column, middle_column, right_column = st.columns(3)
+    with left_column:
+        st.subheader("Kategori")
+        st.dataframe(kategori)
+    with middle_column:
+        st.subheader("Merk")
+        st.dataframe(merk)
+    with right_column:
+        st.subheader("Processor")
+        st.dataframe(processor)
+    st.markdown("___")
+    # Footer
+    st.caption("Copyright © Yoas_Ariel 2024")
 
 # Menu
 selected = option_menu(
         menu_title=None,
-        options=["Home", "Table", "Dashboard"],
-        icons=["house-door-fill", "table", "graph-up"],
+        options=["Home", "Stock", "Table", "Dashboard"],
+        icons=["house-door-fill", "box", "table", "graph-up"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal",
@@ -315,6 +388,8 @@ selected = option_menu(
 # Page
 if selected == "Home":
     home()
+if selected == "Stock":
+    stock()
 if selected == "Table":
     table()
 if selected == "Dashboard":
