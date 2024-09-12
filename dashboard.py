@@ -334,6 +334,8 @@ def stock():
     )
 
     # Product, Cabang DF
+    stock_df_selection["MERK"] = stock_df_selection["MERK"].astype(str)
+    stock_df_selection["PROCESSOR"] = stock_df_selection["PROCESSOR"].astype(str)
     product = stock_df_selection.groupby(["PRODUCT", "CABANG"]).agg({
         "QTY": "sum"
     }).sort_index(ascending=True)
@@ -341,16 +343,16 @@ def stock():
     st.dataframe(product, width=750, use_container_width=False)
 
     # Kategori, Merk, Processor DF
-    kategori = stock_df_selection.groupby("KATEGORI").agg({
+    kategori = stock_df_selection.groupby(["KATEGORI", "MERK", "PROCESSOR"]).agg({
         "QTY": "sum"
-    }).sort_values(by="QTY", ascending=False)
+    }).sort_index(ascending=True)
     merk = stock_df_selection.groupby("MERK").agg({
         "QTY": "sum"
     }).sort_values(by="QTY", ascending=False)
     processor = stock_df_selection.groupby("PROCESSOR").agg({
         "QTY": "sum"
     }).sort_values(by="QTY", ascending=False)
-    left_column, middle_column, right_column = st.columns(3)
+    left_column, middle_column, right_column = st.columns([4, 1, 1])
     with left_column:
         st.subheader("Kategori")
         st.dataframe(kategori)
