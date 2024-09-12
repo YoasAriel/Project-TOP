@@ -336,7 +336,7 @@ def stock():
     # Product, Cabang DF
     product = stock_df_selection.groupby(["PRODUCT", "CABANG"]).agg({
         "QTY": "sum"
-    }).sort_values(by="QTY", ascending=False)
+    }).sort_index(ascending=True)
     st.subheader("Product")
     st.dataframe(product, width=750, use_container_width=False)
 
