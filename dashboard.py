@@ -6,7 +6,11 @@ import streamlit as st
 import openpyxl
 from streamlit_option_menu import option_menu
 sns.set(style='dark')
-
+st.logo(
+    image="logo_top_white.jpg",
+    link="",
+    icon_image="logo_top_black.jpg"
+)
 # Title of the dashboard
 st.set_page_config(
     page_title="TOP COMPUTER DASHBOARD", 
