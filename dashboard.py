@@ -25,6 +25,7 @@ def  load_data():
 so_all_df = load_data()
 stock_df = pd.read_excel("stock.xlsx", engine="openpyxl")
 
+
 def home():
     # Title
     st.title("CV. Tunggal Opti Persada - TOP Computer")
@@ -186,7 +187,7 @@ def table():
         "NET_SELLING": "sum",
         "QTY_TOTAL": "sum"
     }).sort_values(by="NET_SELLING", ascending=False)
-    left_column, middle_column, right_column = st.columns(3)
+    left_column, middle_column, right_column = st.columns([3, 3, 3])
     with left_column:
         st.subheader("Kategori")
         st.dataframe(kategori)
@@ -338,10 +339,7 @@ def stock():
     stock_df_selection["PROCESSOR"] = stock_df_selection["PROCESSOR"].astype(str)
     product = stock_df_selection.groupby(["PRODUCT", "CABANG"]).agg({
         "QTY": "sum"
-    }).sort_index(ascending=True)
-    st.subheader("Product")
-    st.dataframe(product, width=750, use_container_width=False)
-
+    })
     # Kategori, Merk, Processor DF
     kategori = stock_df_selection.groupby(["KATEGORI", "MERK", "PROCESSOR"]).agg({
         "QTY": "sum"
@@ -352,10 +350,14 @@ def stock():
     processor = stock_df_selection.groupby("PROCESSOR").agg({
         "QTY": "sum"
     }).sort_values(by="QTY", ascending=False)
-    left_column, middle_column, right_column = st.columns([4, 1, 1])
+    left_column, right_column = st.columns([4, 4])
     with left_column:
+        st.subheader("Product")
+        st.dataframe(product)
+    with right_column:
         st.subheader("Kategori")
         st.dataframe(kategori)
+    middle_column, right_column = st.columns([2, 2])
     with middle_column:
         st.subheader("Merk")
         st.dataframe(merk)
