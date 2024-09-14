@@ -167,7 +167,7 @@ def table():
     sales = so_all_df_selection.groupby(["SALES"]).agg({
         "NET_SELLING": "sum"
     }).sort_values(by="NET_SELLING", ascending=False)
-    left_column, middle_column, right_column = st.columns([3, 3, 2])
+    left_column, middle_column, right_column = st.columns([5, 4, 2])
     with left_column:
         st.subheader("Branch")
         st.dataframe(branch)
@@ -354,7 +354,7 @@ def stock():
     processor = stock_df_selection.groupby("PROCESSOR").agg({
         "QTY": "sum"
     }).sort_values(by="QTY", ascending=False)
-    left_column, right_column = st.columns([4, 4])
+    left_column, right_column = st.columns([6, 4])
     with left_column:
         st.subheader("Product")
         st.dataframe(product)
