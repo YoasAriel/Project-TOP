@@ -270,6 +270,11 @@ def dashboard():
     line_selling_df = so_all_df_selection.groupby(["LINE_SELLING", "Bulan"])["NET_SELLING"].sum().reset_index()
     st.line_chart(data=line_selling_df, x="Bulan", y="NET_SELLING", color="LINE_SELLING", use_container_width=True)
     
+    # Branch
+    st.subheader("Total Revenue by Branch")
+    branch_df = so_all_df_selection.groupby(["CABANG", "Bulan"])["NET_SELLING"].sum().reset_index()
+    st.line_chart(data=branch_df, x="Bulan", y="NET_SELLING", color="CABANG", use_container_width=True)
+
     # TOP 10 Category & Brand
     top10_category, top10_brand = st.columns(2)
     with top10_category:
@@ -295,7 +300,7 @@ def dashboard():
         st.pyplot(plt.gcf())
     
     # Pie Chart
-
+    
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
 
