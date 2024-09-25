@@ -167,7 +167,6 @@ def stock():
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
 
-
 def table():
     # Icon
     st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
