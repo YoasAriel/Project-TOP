@@ -334,7 +334,6 @@ def dashboard():
         st.subheader("Average Revenue  ")
         st.subheader(f"{average_net_selling:,}")
     st.markdown("___")
-    st.title("Under Construction . . .")
     
     # Line Selling
     st.subheader("Total Revenue by Line Selling")
@@ -374,6 +373,7 @@ def dashboard():
     
     # Pie Chart
     
+
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
 
