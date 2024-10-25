@@ -347,42 +347,30 @@ def dashboard():
     branch_df = so_all_df_selection.groupby(["CABANG", "Bulan"])["NET_SELLING"].sum().reset_index()
     st.line_chart(data=branch_df, x="Bulan", y="NET_SELLING", color="CABANG", use_container_width=True)
 
-    # TOP 10 Category & Brand
-    # top10_category, top10_brand = st.columns(2)
-    # with top10_category:
-    #     st.subheader("Top 10 by Category")
-    #     top10_category_df = so_all_df_selection.groupby("KATEGORI")["NET_SELLING"].sum().sort_values(ascending=False).reset_index()
-    #     plt.figure(figsize=(10,6))
-    #     plt.bar(top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["KATEGORI"], top10_category_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
-    #     plt.title("Top 10 by Category")
-    #     plt.xlabel("Category")
-    #     plt.ylabel("Total Revenue")
-    #     plt.xticks(rotation=45, ha="right")
-    #     st.pyplot(plt.gcf())
-    # with top10_brand:
-    #     st.subheader("Top 10 by Brand")
-    #     top10_brand_df = so_all_df_selection.groupby("MERK")["NET_SELLING"].sum().sort_values(ascending=False).reset_index()
-    #     top10_brand_df["MERK"] = top10_brand_df["MERK"].astype(str)
-    #     plt.figure(figsize=(10,6))
-    #     plt.bar(top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["MERK"], top10_brand_df.sort_values(by="NET_SELLING", ascending=False).head(10)["NET_SELLING"], color="skyblue")
-    #     plt.title("Top 10 by Brand")
-    #     plt.xlabel("Brand")
-    #     plt.ylabel("Total Revenue")
-    #     plt.xticks(rotation=45, ha="right")
-    #     st.pyplot(plt.gcf())
+    # TOP 10 Category & Brand (Value)
     top10_category, top10_brand = st.columns(2)
     with top10_category:
-        st.subheader("Top 10 by Category")
+        st.subheader("Top 10 by Category (Value)")
         top10_category_df = so_all_df_selection.groupby("KATEGORI")["NET_SELLING"].sum().sort_values(ascending=False).head(10).reset_index()
         st.bar_chart(top10_category_df, x="KATEGORI", y="NET_SELLING", color="KATEGORI", use_container_width=True)
 
     with top10_brand:
-         st.subheader("Top 10 by Brand")
+         st.subheader("Top 10 by Brand (Value)")
          top10_brand_df = so_all_df_selection.groupby("MERK")["NET_SELLING"].sum().sort_values(ascending=False).head(10).reset_index()
          top10_brand_df["MERK"] = top10_brand_df["MERK"].astype(str)
          st.bar_chart(top10_brand_df, x="MERK", y="NET_SELLING", color="MERK", use_container_width=True)
-    # Pie Chart
     
+    # TOP 10 Category & Brand (Qty)
+    with top10_category:
+        st.subheader("Top 10 by Category (Qty)")
+        top10_category_df = so_all_df_selection.groupby("KATEGORI")["QTY_TOTAL"].sum().sort_values(ascending=False).head(10).reset_index()
+        st.bar_chart(top10_category_df, x="KATEGORI", y="QTY_TOTAL", color="KATEGORI", use_container_width=True)
+
+    with top10_brand:
+         st.subheader("Top 10 by Brand (Qty)")
+         top10_brand_df = so_all_df_selection.groupby("MERK")["QTY_TOTAL"].sum().sort_values(ascending=False).head(10).reset_index()
+         top10_brand_df["MERK"] = top10_brand_df["MERK"].astype(str)
+         st.bar_chart(top10_brand_df, x="MERK", y="QTY_TOTAL", color="MERK", use_container_width=True)
 
     # Footer
     st.caption("Copyright © Yoas_Ariel 2024")
