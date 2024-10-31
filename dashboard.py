@@ -337,7 +337,7 @@ def dashboard():
     
     # Line Selling
     st.subheader("Total Revenue by Line Selling")
-    month_order = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Desember"]
+    month_order = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     so_all_df_selection["Bulan"] = pd.Categorical(so_all_df_selection["Bulan"], categories=month_order, ordered=True)
     line_selling_df = so_all_df_selection.groupby(["LINE_SELLING", "Bulan"])["NET_SELLING"].sum().reset_index()
     st.line_chart(data=line_selling_df, x="Bulan", y="NET_SELLING", color="LINE_SELLING", use_container_width=True)
