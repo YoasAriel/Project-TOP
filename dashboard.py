@@ -32,7 +32,7 @@ stock_df = pd.read_excel("stock.xlsx", engine="openpyxl")
 
 def home():
     # Title
-    st.title("CV. Tunggal Opti Persada - TOP Computer")
+    st.title("CV Tunggal Opti Persada - TOP Computer")
     # Icon
     st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
 
@@ -96,7 +96,7 @@ def home():
 
 def stock():
     # Title
-    st.title("CV. Tunggal Opti Persada - TOP Computer")
+    st.title("CV Tunggal Opti Persada - TOP Computer")
     # Icon
     st.sidebar.image("logo_tunggal_utama_gelap.png", caption="THE BEST IT SOLUTION")
     select_all = st.checkbox("Select All Product")
@@ -211,7 +211,7 @@ def table():
     )
 
 
-    st.title("CV. Tunggal Opti Persada - Summary")
+    st.title("CV Tunggal Opti Persada - Summary")
     # KPI
     total_net_selling = int(so_all_df_selection["NET_SELLING"].sum())
     total_qty = int(so_all_df_selection["QTY_TOTAL"].sum())
